@@ -179,4 +179,21 @@ else
 }
 }
 
+void Timer0_Dimer(void)
+{
+	// phase correct mode
+	SIT_BIT(TCCR0_REG,6);
+	//SIT_BIT(TCCR0_REG,3);
 
+	// no prescaller
+	SIT_BIT(TCCR0_REG,5);
+	SIT_BIT(TCCR0_REG,0);
+
+	// make pin 3 in port B be output
+	Dio_Configure_Channel(DIO_PORTB, 3, DIO_OUTPUT);
+}
+
+void Timer0_Dimmer_Light(u8 duty)
+{
+OCR0_REG=duty;
+}

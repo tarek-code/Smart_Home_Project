@@ -25,7 +25,7 @@ void EXT_INT_UASRT_Callout(void(*ptr)(u8));
 
 
 
-void UART1_Rx_Str(u8 send[15]);
+u8 *UART1_Rx_Str();
 
 #define BAUD 9600
 

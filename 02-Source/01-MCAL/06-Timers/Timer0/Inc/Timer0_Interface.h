@@ -24,4 +24,8 @@ void Timer0_FPWM_Int();
 void Timer0_FPWM_Stop();
 void Timer0_Set_Duty(u8 duty_cycle);
 
+// for Dimmer
+
+void Timer0_Dimmer_Light(u8 duty);
+void Timer0_Dimer(void);
 #endif /* TIMER0_INTERFACE_H_ */

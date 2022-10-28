@@ -8,6 +8,7 @@
 #include "LM35_Interface.h"
 #include <string.h>
 #include "Timer0_Interface.h"
+#include "Dimmer_Interface.h"
                                 // variables
 u8 error=5; // to enhance the reading from LM35
 s8 * str; // for storing String
@@ -230,7 +231,8 @@ int main(void)
 	Lcd_Int();
 	Keypad_Int();
 	DC_Motor_Int();
-
+	//Dimmer_Int();
+//Dimmer_duty(0);
 	// Some commands for LCD
 	Lcd_Cmd(_LCD_CLEAR);
 	Lcd_Cmd(_LCD_CURSOR_OFF);
@@ -256,8 +258,8 @@ while(1)
 	while(true)
 	{
 
-		Bluetooth_ReadString(name);
-		if(strcmp("admin",name)==0)
+
+		if(strcmp(UART1_Rx_Str(),"admin")==0)
 		{
 
 			Lcd_Cmd(_LCD_CLEAR);
@@ -267,24 +269,24 @@ admin=1;
 Bluetooth_TransmitString("Write ur command");
 			while(admin)
 			{
-				Check_Fane();
+
 			Blutooth_Fn(Bluetooth_Receive(),1);
 			_delay_ms(500);
 			}
 		}
 
-		else if(strcmp("guest",name)==0)
+		else if(strcmp("guest",UART1_Rx_Str())==0)
 			{
 			Lcd_Cmd(_LCD_CLEAR);
-		Lcd_Display_str(" Welcome  Admin ");
+		Lcd_Display_str("Welcome Guest");
 			Bluetooth_TransmitString("Welcome Guest");
-				Bluetooth_TransmitString("Welcome Guest");
+
 							guest=1;
 							if(allowing1==1)
 							{
 								while(guest)
 											{
-									Check_Fane();
+
 												Blutooth_Fn(Bluetooth_Receive(),0);
 											}
 							}
@@ -302,22 +304,19 @@ Bluetooth_TransmitString("Write ur command");
 
 
 
-		else if(Bluetooth_Receive()=='E') {
+		else if(strcmp(UART1_Rx_Str(),"exit")==0) {
 			true=0;
-			Lcd_Goto_Row_Column(1, 0);
-			Lcd_Display_str("         ");
-			Lcd_Goto_Row_Column(1, 0);
+			Lcd_Cmd(_LCD_CLEAR);
 			Lcd_Display_str("Exiting from blutooth");
 Bluetooth_TransmitString("Exiting from blutooth");
 
 	}
 
 
-			else if (strcmp(EEPROM_internal_Read(0),name)!=0 && Bluetooth_Receive()!='E')
+			else if (strcmp(EEPROM_internal_Read(0),name)!=0 &&strcmp(UART1_Rx_Str(),"exit")!=0 &&
+					strcmp(UART1_Rx_Str(),"guest")!=0)
 		{
-				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
-				Lcd_Goto_Row_Column(1, 0);
+				Lcd_Cmd(_LCD_CLEAR);
 				Lcd_Display_str("Wrong password");
 
 			Bluetooth_TransmitString("Wrong password");
@@ -332,7 +331,7 @@ Bluetooth_TransmitString("Exiting from blutooth");
 
 
 
-		Bluetooth_ReadString(name);
+
 
 	}
 
@@ -444,4 +443,3 @@ while(Keypad_Read()=='P')
 }
 
 }
-

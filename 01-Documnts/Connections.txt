@@ -1,0 +1,20 @@
+KEYPAD
+
+R0 > C1
+R1 > C0
+R2 > C5
+R3 > A0
+C0 > B4
+C1 > B5
+C2 > B6
+C3 > B7
+
+servo > D5
+
+DC_MOTOR
+
+ENA > D7
+1 > C3
+2 > C4
+
+DIMMER > B3 (THIS WILL MAKE LCD NOT WORKING)

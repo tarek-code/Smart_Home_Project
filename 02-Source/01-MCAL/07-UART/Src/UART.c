@@ -75,19 +75,20 @@ void UART_TransmitString(u8 * string){
 
 
 
-void UART1_Rx_Str(u8 send[15])
+u8  *UART1_Rx_Str()
 {
-
-
+	u8 send[15]={0};
+data=0;
 u8 i=0;
-	while(i!=7)
+	while(UART_Receive()!=' ')
 	{
-		send[i]=UART_Receive();
+		send[i]=data;
 i++;
 	}
 
-	send[5]='\0';
+	send[i]='\0';
 GLB_ON();
+return send;
 }
 
 
