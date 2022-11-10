@@ -9,6 +9,8 @@
 #include <string.h>
 #include "Timer0_Interface.h"
 #include "Dimmer_Interface.h"
+#include "Buzzer_Interface.h"
+#include "Button_Interface.h"
                                 // variables
 u8 error=5; // to enhance the reading from LM35
 s8 * str; // for storing String
@@ -20,7 +22,8 @@ u8 allowing1=0; // to make admin give access to guest
 u8 name[15]={0}; // to recive the string from bluetooth
 u8 read=0; // for reading from LM35
 u8 arr[4]; // to convert from u8 to string for LCD
-
+u8 error_counter=0;
+u8 mode_select=0;
                              // Functions
 //Fane Fun
 void Start_Fane(void)
@@ -70,28 +73,28 @@ void Blutooth_Fn(u8 data,s8 m)
 			case '0':
 				Led_ON(LED0);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led0:ON");
 				break;
 			case '1':
 				Led_OFF(LED0);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led0:Off");
 				break;
 			case '2':
 				Led_ON(LED1);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led1:ON");
 				break;
 			case '3':
 				Led_OFF(LED1);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led1:Off");
 
@@ -100,14 +103,14 @@ void Blutooth_Fn(u8 data,s8 m)
 			case '4':
 				Led_ON(LED2);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led2:ON");
 				break;
 			case '5':
 				Led_OFF(LED2);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led2:Off");
 
@@ -115,7 +118,7 @@ void Blutooth_Fn(u8 data,s8 m)
 			case 'E':
 				guest=0;
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Exit done ");
 				Bluetooth_TransmitString("Exit done > write the password");
@@ -131,28 +134,28 @@ void Blutooth_Fn(u8 data,s8 m)
 			case '0':
 				Led_ON(LED0);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led0:ON");
 				break;
 			case '1':
 				Led_OFF(LED0);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led0:Off");
 				break;
 			case '2':
 				Led_ON(LED1);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led1:ON");
 				break;
 			case '3':
 				Led_OFF(LED1);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led1:Off");
 
@@ -161,14 +164,14 @@ void Blutooth_Fn(u8 data,s8 m)
 			case '4':
 				Led_ON(LED2);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led2:ON");
 				break;
 			case '5':
 				Led_OFF(LED2);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Led2:Off");
 
@@ -185,14 +188,14 @@ void Blutooth_Fn(u8 data,s8 m)
 			case 'd':
 				Servo_Motor_Rotat(5);
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 						Lcd_Display_str("Door:close");
 			break;
 			case 'G':
 				allowing1=1;
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("user 1 allowed");
 				Bluetooth_TransmitString("user 1 allowed");
@@ -201,7 +204,7 @@ void Blutooth_Fn(u8 data,s8 m)
 			case 'g':
 				allowing1=0;
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("user 1 not allowed");
 				Bluetooth_TransmitString("user 1 not allowed");
@@ -209,7 +212,7 @@ void Blutooth_Fn(u8 data,s8 m)
 
 			case 'E':
 				Lcd_Goto_Row_Column(1, 0);
-				Lcd_Display_str("         ");
+				Lcd_Display_str("                ");
 				Lcd_Goto_Row_Column(1, 0);
 				Lcd_Display_str("Exit done");
 				Bluetooth_TransmitString("Exit done > write the password");
@@ -231,6 +234,8 @@ int main(void)
 	Lcd_Int();
 	Keypad_Int();
 	DC_Motor_Int();
+	Buzzer_Int();
+	Button_Int();
 	//Dimmer_Int();
 //Dimmer_duty(0);
 	// Some commands for LCD
@@ -244,16 +249,38 @@ int main(void)
 Timer0_Delay(1000, Check_Fane);
 
 	label:
+
+//true=1;
+mode_select=1;
+GLB_OFF();
+
+while(1)
+{
+// choosing mode
+	while(mode_select)
+	{
+		Lcd_Cmd(_LCD_CLEAR);
+		Lcd_Display_str("Select your mode");
+
+if(Button_Read(BUTTON2)==1)
+{
 	Lcd_Cmd(_LCD_CLEAR);
 Lcd_Display_str("    Welcome    ");
 str = (s8 *)"Write your password";
 Bluetooth_TransmitString(str);
 true=1;
-GLB_OFF();
-
-while(1)
+mode_select=0;
+}
+else if(Button_Read(BUTTON1)==1)
 {
-
+	Lcd_Cmd(_LCD_CLEAR);
+	Lcd_Display_str("Exiting from blutooth");
+Bluetooth_TransmitString("Exiting from blutooth");
+mode_select=0;
+true=0;
+}
+_delay_ms(500);
+	}
 // bluetooth loop
 	while(true)
 	{
@@ -293,7 +320,7 @@ Bluetooth_TransmitString("Write ur command");
 							else
 							{
 								Lcd_Goto_Row_Column(1, 0);
-								Lcd_Display_str("         ");
+								Lcd_Display_str("                ");
 								Lcd_Goto_Row_Column(1, 0);
 								Lcd_Display_str("No permission");
 								Bluetooth_TransmitString("No permission");
@@ -312,19 +339,42 @@ Bluetooth_TransmitString("Exiting from blutooth");
 
 	}
 
+		else if(strcmp(UART1_Rx_Str(),"reset")==0){
+							if(strcmp(UART1_Rx_Str(),"reset")==0 && error_counter>=3)
+							{
+								Buzzer_OFF(BUZZER0);
+								error_counter=0;
+								Lcd_Cmd(_LCD_CLEAR);
+							Lcd_Display_str("Reset complete");
+
+						 Bluetooth_TransmitString("Reset complete");
+							}
+						}
 
 			else if (strcmp(EEPROM_internal_Read(0),name)!=0 &&strcmp(UART1_Rx_Str(),"exit")!=0 &&
-					strcmp(UART1_Rx_Str(),"guest")!=0)
+					strcmp(UART1_Rx_Str(),"guest")!=0 &&strcmp(UART1_Rx_Str(),"reset")!=0)
 		{
-				Lcd_Cmd(_LCD_CLEAR);
-				Lcd_Display_str("Wrong password");
+				if(error_counter<3)
+				{
+					Lcd_Cmd(_LCD_CLEAR);
+					Lcd_Display_str("Wrong password");
 
-			Bluetooth_TransmitString("Wrong password");
-			for(u8 i=0;i<6;i++)
-			{
+				Bluetooth_TransmitString("Wrong password");
+				error_counter++;
+				}
+				else if(error_counter==3) {
 
-				name[i]=0;
-			}
+						Lcd_Cmd(_LCD_CLEAR);
+											Lcd_Display_str("Wrong password 3 times");
+
+										Bluetooth_TransmitString("Wrong password 3 times");
+										Buzzer_ON(BUZZER0);
+
+
+
+				}
+
+
 
 		}
 
@@ -354,7 +404,7 @@ while(user)
 		_delay_ms(300);
 		Led_ON(LED0);
 Lcd_Goto_Row_Column(1, 0);
-Lcd_Display_str("         ");
+Lcd_Display_str("                ");
 Lcd_Goto_Row_Column(1, 0);
 		Lcd_Display_str("Led0:ON");
 		Bluetooth_Transmit(Keypad_Read());
@@ -364,7 +414,7 @@ Lcd_Goto_Row_Column(1, 0);
 		_delay_ms(300);
 		Led_OFF(LED0);
 		Lcd_Goto_Row_Column(1, 0);
-		Lcd_Display_str("         ");
+		Lcd_Display_str("                ");
 		Lcd_Goto_Row_Column(1, 0);
 		Lcd_Display_str("Led0:Off");
 		Bluetooth_Transmit(Keypad_Read());
@@ -374,7 +424,7 @@ Lcd_Goto_Row_Column(1, 0);
 		_delay_ms(300);
 		Led_ON(LED1);
 		Lcd_Goto_Row_Column(1, 0);
-		Lcd_Display_str("         ");
+		Lcd_Display_str("                ");
 		Lcd_Goto_Row_Column(1, 0);
 		Lcd_Display_str("Led1:ON");
 		Bluetooth_Transmit(Keypad_Read());
@@ -384,7 +434,7 @@ Lcd_Goto_Row_Column(1, 0);
 		_delay_ms(300);
 		Led_OFF(LED1);
 		Lcd_Goto_Row_Column(1, 0);
-		Lcd_Display_str("         ");
+		Lcd_Display_str("                ");
 		Lcd_Goto_Row_Column(1, 0);
 		Lcd_Display_str("Led1:Off");
 		Bluetooth_Transmit(Keypad_Read());
@@ -394,7 +444,7 @@ Lcd_Goto_Row_Column(1, 0);
 			_delay_ms(300);
 			Led_ON(LED2);
 			Lcd_Goto_Row_Column(1, 0);
-			Lcd_Display_str("         ");
+			Lcd_Display_str("                ");
 			Lcd_Goto_Row_Column(1, 0);
 			Lcd_Display_str("Led2:ON");
 			Bluetooth_Transmit(Keypad_Read());
@@ -404,7 +454,7 @@ Lcd_Goto_Row_Column(1, 0);
 			_delay_ms(300);
 			Led_OFF(LED2);
 			Lcd_Goto_Row_Column(1, 0);
-			Lcd_Display_str("         ");
+			Lcd_Display_str("                ");
 			Lcd_Goto_Row_Column(1, 0);
 			Lcd_Display_str("Led2:Off");
 			Bluetooth_Transmit(Keypad_Read());
